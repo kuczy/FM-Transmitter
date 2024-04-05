@@ -1,0 +1,10 @@
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\bin\Debug\FM Transmitter.exe.config
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\bin\Debug\FM Transmitter.exe
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\bin\Debug\FM Transmitter.pdb
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM Transmitter.csprojResolveAssemblyReference.cache
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM_Transmitter.Properties.Resources.resources
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM Transmitter.csproj.GenerateResource.Cache
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM Transmitter.csproj.CoreCompileInputs.cache
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM Transmitter.exe
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM Transmitter.pdb
+D:\Projekty\QN8007-UKF-FM-Transmitter\WindowsApp\FM Transmitter\FM Transmitter\obj\Debug\FM_Transmitter.Transmitter.resources
