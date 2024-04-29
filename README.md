@@ -25,6 +25,18 @@
 
 ![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Transmitter_Back.jpg "WFM Transmitter rear view")
 
+### RF parameters:
+The following are the results of the RF test of the transmitter
+
+Signal spectrum, and output power measurement (20mW):
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/pomiar2.jpeg "WFM Transmitter rear view")
+
+Ten consecutive harmonics and the measurement of their attenuation:
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/pomiar3.jpeg "WFM Transmitter rear view")
+
+FM modulation - the amount of frequency deviation and audio distortion
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/pomiar6.jpeg "WFM Transmitter rear view")
+
 ### Device main screen:
 When the device is turned on, the screen will display a welcome message, followed by the main screen:
 
