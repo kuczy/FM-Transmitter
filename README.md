@@ -19,7 +19,7 @@
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- TP/TA: Traffic announcement support.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Date / Time - synchronization of the radio receiver with the PC controlling the transmitter
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Static): Text broadcast without control application,
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Dynamic): Text broadcast depending on the type of broadcast (Music/Speech/Traffic).
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Dynamic): Text broadcast depending on the type of broadcast (Music/Speech/News/Traffic).
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText automation (Music): Work with an external player (Winamp / Foobar2000) to automate RadioText
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (e.g., "Now Playing: Artist - Track").
 
