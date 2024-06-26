@@ -49,6 +49,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
             this.grpRadioTexts = new System.Windows.Forms.GroupBox();
+            this.LblDebug = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
+            this.txtNews = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -62,10 +66,12 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.grpRdsCntrl = new System.Windows.Forms.GroupBox();
+            this.chBoxNews = new System.Windows.Forms.CheckBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
+            this.chBoxTraffic = new System.Windows.Forms.CheckBox();
             this.label26 = new System.Windows.Forms.Label();
             this.lblRdsSource = new System.Windows.Forms.Label();
-            this.chBoxTraffic = new System.Windows.Forms.CheckBox();
             this.radioSpeech = new System.Windows.Forms.RadioButton();
             this.radioMusic = new System.Windows.Forms.RadioButton();
             this.label7 = new System.Windows.Forms.Label();
@@ -107,8 +113,11 @@
             this.label15 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerScroll = new System.Windows.Forms.Timer(this.components);
             this.timerRadioTextAuto = new System.Windows.Forms.Timer(this.components);
+            this.RdsDataTime = new System.Windows.Forms.Timer(this.components);
+            this.debug = new System.Windows.Forms.Label();
             this.grpFrontPanel.SuspendLayout();
             this.scrollPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.icoStereo)).BeginInit();
@@ -128,6 +137,7 @@
             this.tabAbout.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -168,7 +178,7 @@
             this.btnRetry.Text = "Retry";
             this.btnRetry.UseVisualStyleBackColor = true;
             this.btnRetry.Visible = false;
-            this.btnRetry.Click += new System.EventHandler(this.btnRetry_Click);
+            this.btnRetry.Click += new System.EventHandler(this.BtnRetry_Click);
             // 
             // scrollPanel
             // 
@@ -193,9 +203,9 @@
             // 
             // lblDisconnect
             // 
-            this.lblDisconnect.BackColor = System.Drawing.Color.Black;
-            this.lblDisconnect.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lblDisconnect.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblDisconnect.BackColor = System.Drawing.Color.Orange;
+            this.lblDisconnect.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblDisconnect.ForeColor = System.Drawing.Color.Black;
             this.lblDisconnect.Location = new System.Drawing.Point(5, 38);
             this.lblDisconnect.Name = "lblDisconnect";
             this.lblDisconnect.Size = new System.Drawing.Size(226, 23);
@@ -303,7 +313,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.BackColor = System.Drawing.Color.Orange;
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(4, 15);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
@@ -321,9 +331,9 @@
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(537, 427);
+            this.tabControl1.Size = new System.Drawing.Size(537, 466);
             this.tabControl1.TabIndex = 17;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // tabMain
             // 
@@ -333,13 +343,18 @@
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(529, 401);
+            this.tabMain.Size = new System.Drawing.Size(529, 440);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
             // 
             // grpRadioTexts
             // 
+            this.grpRadioTexts.Controls.Add(this.debug);
+            this.grpRadioTexts.Controls.Add(this.LblDebug);
+            this.grpRadioTexts.Controls.Add(this.label29);
+            this.grpRadioTexts.Controls.Add(this.txtNews);
+            this.grpRadioTexts.Controls.Add(this.label30);
             this.grpRadioTexts.Controls.Add(this.label21);
             this.grpRadioTexts.Controls.Add(this.label20);
             this.grpRadioTexts.Controls.Add(this.label19);
@@ -355,10 +370,45 @@
             this.grpRadioTexts.Enabled = false;
             this.grpRadioTexts.Location = new System.Drawing.Point(6, 223);
             this.grpRadioTexts.Name = "grpRadioTexts";
-            this.grpRadioTexts.Size = new System.Drawing.Size(505, 172);
+            this.grpRadioTexts.Size = new System.Drawing.Size(505, 211);
             this.grpRadioTexts.TabIndex = 13;
             this.grpRadioTexts.TabStop = false;
             this.grpRadioTexts.Text = "RDS Radio Text";
+            // 
+            // LblDebug
+            // 
+            this.LblDebug.AutoSize = true;
+            this.LblDebug.Location = new System.Drawing.Point(4, 195);
+            this.LblDebug.Name = "LblDebug";
+            this.LblDebug.Size = new System.Drawing.Size(0, 13);
+            this.LblDebug.TabIndex = 14;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(375, 174);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(65, 13);
+            this.label29.TabIndex = 26;
+            this.label29.Text = "64 char max";
+            // 
+            // txtNews
+            // 
+            this.txtNews.Location = new System.Drawing.Point(3, 131);
+            this.txtNews.MaxLength = 64;
+            this.txtNews.Name = "txtNews";
+            this.txtNews.Size = new System.Drawing.Size(366, 20);
+            this.txtNews.TabIndex = 25;
+            this.txtNews.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtNews_KeyPress);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(0, 154);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(94, 13);
+            this.label30.TabIndex = 24;
+            this.label30.Text = "Traffic information:";
             // 
             // label21
             // 
@@ -398,7 +448,7 @@
             this.radioTxtSourceManual.TabStop = true;
             this.radioTxtSourceManual.Text = "Manual";
             this.radioTxtSourceManual.UseVisualStyleBackColor = true;
-            this.radioTxtSourceManual.Click += new System.EventHandler(this.radioTxtSourceManual_Click);
+            this.radioTxtSourceManual.Click += new System.EventHandler(this.RadioTxtSourceManual_Click);
             // 
             // radioTxtSourceAutomatic
             // 
@@ -409,7 +459,7 @@
             this.radioTxtSourceAutomatic.TabIndex = 19;
             this.radioTxtSourceAutomatic.Text = "Automatic";
             this.radioTxtSourceAutomatic.UseVisualStyleBackColor = true;
-            this.radioTxtSourceAutomatic.Click += new System.EventHandler(this.radioTxtSourceAutomatic_Click);
+            this.radioTxtSourceAutomatic.Click += new System.EventHandler(this.RadioTxtSourceAutomatic_Click);
             // 
             // label11
             // 
@@ -427,7 +477,7 @@
             this.txtMusic.Name = "txtMusic";
             this.txtMusic.Size = new System.Drawing.Size(366, 20);
             this.txtMusic.TabIndex = 5;
-            this.txtMusic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMusic_KeyPress);
+            this.txtMusic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtMusic_KeyPress);
             // 
             // txtSpeech
             // 
@@ -436,25 +486,25 @@
             this.txtSpeech.Name = "txtSpeech";
             this.txtSpeech.Size = new System.Drawing.Size(366, 20);
             this.txtSpeech.TabIndex = 4;
-            this.txtSpeech.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSpeech_KeyPress);
+            this.txtSpeech.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtSpeech_KeyPress);
             // 
             // txtTraffic
             // 
-            this.txtTraffic.Location = new System.Drawing.Point(3, 131);
+            this.txtTraffic.Location = new System.Drawing.Point(3, 170);
             this.txtTraffic.MaxLength = 64;
             this.txtTraffic.Name = "txtTraffic";
             this.txtTraffic.Size = new System.Drawing.Size(366, 20);
             this.txtTraffic.TabIndex = 3;
-            this.txtTraffic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtTraffic_KeyPress);
+            this.txtTraffic.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TxtTraffic_KeyPress);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(0, 115);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(97, 13);
+            this.label10.Size = new System.Drawing.Size(91, 13);
             this.label10.TabIndex = 2;
-            this.label10.Text = "Traffic information::";
+            this.label10.Text = "News information:";
             // 
             // label9
             // 
@@ -476,10 +526,12 @@
             // 
             // grpRdsCntrl
             // 
+            this.grpRdsCntrl.Controls.Add(this.chBoxNews);
+            this.grpRdsCntrl.Controls.Add(this.label28);
             this.grpRdsCntrl.Controls.Add(this.label25);
+            this.grpRdsCntrl.Controls.Add(this.chBoxTraffic);
             this.grpRdsCntrl.Controls.Add(this.label26);
             this.grpRdsCntrl.Controls.Add(this.lblRdsSource);
-            this.grpRdsCntrl.Controls.Add(this.chBoxTraffic);
             this.grpRdsCntrl.Controls.Add(this.radioSpeech);
             this.grpRdsCntrl.Controls.Add(this.radioMusic);
             this.grpRdsCntrl.Controls.Add(this.label7);
@@ -493,6 +545,28 @@
             this.grpRdsCntrl.TabStop = false;
             this.grpRdsCntrl.Text = "RDS Control";
             // 
+            // chBoxNews
+            // 
+            this.chBoxNews.AutoSize = true;
+            this.chBoxNews.BackColor = System.Drawing.Color.Orange;
+            this.chBoxNews.Location = new System.Drawing.Point(124, 69);
+            this.chBoxNews.Name = "chBoxNews";
+            this.chBoxNews.Size = new System.Drawing.Size(111, 17);
+            this.chBoxNews.TabIndex = 30;
+            this.chBoxNews.Text = "Broadcasting now";
+            this.chBoxNews.UseVisualStyleBackColor = false;
+            this.chBoxNews.CheckedChanged += new System.EventHandler(this.ChBoxNews_CheckedChanged);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.BackColor = System.Drawing.Color.Orange;
+            this.label28.Location = new System.Drawing.Point(12, 93);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(94, 13);
+            this.label28.TabIndex = 29;
+            this.label28.Text = "Traffic information:";
+            // 
             // label25
             // 
             this.label25.BackColor = System.Drawing.Color.Orange;
@@ -504,10 +578,22 @@
             this.label25.Text = "RDS RADIO TEXT CONTROL";
             this.label25.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // chBoxTraffic
+            // 
+            this.chBoxTraffic.AutoSize = true;
+            this.chBoxTraffic.BackColor = System.Drawing.Color.Orange;
+            this.chBoxTraffic.Location = new System.Drawing.Point(124, 93);
+            this.chBoxTraffic.Name = "chBoxTraffic";
+            this.chBoxTraffic.Size = new System.Drawing.Size(111, 17);
+            this.chBoxTraffic.TabIndex = 17;
+            this.chBoxTraffic.Text = "Broadcasting now";
+            this.chBoxTraffic.UseVisualStyleBackColor = false;
+            this.chBoxTraffic.CheckedChanged += new System.EventHandler(this.ChBoxTraffic_CheckedChanged);
+            // 
             // label26
             // 
             this.label26.BackColor = System.Drawing.Color.Orange;
-            this.label26.Location = new System.Drawing.Point(6, 110);
+            this.label26.Location = new System.Drawing.Point(6, 115);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(246, 20);
             this.label26.TabIndex = 26;
@@ -527,18 +613,6 @@
             this.lblRdsSource.Text = "Static";
             this.lblRdsSource.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // chBoxTraffic
-            // 
-            this.chBoxTraffic.AutoSize = true;
-            this.chBoxTraffic.BackColor = System.Drawing.Color.Orange;
-            this.chBoxTraffic.Location = new System.Drawing.Point(124, 69);
-            this.chBoxTraffic.Name = "chBoxTraffic";
-            this.chBoxTraffic.Size = new System.Drawing.Size(111, 17);
-            this.chBoxTraffic.TabIndex = 17;
-            this.chBoxTraffic.Text = "Broadcasting now";
-            this.chBoxTraffic.UseVisualStyleBackColor = false;
-            this.chBoxTraffic.CheckedChanged += new System.EventHandler(this.chBoxTraffic_CheckedChanged);
-            // 
             // radioSpeech
             // 
             this.radioSpeech.AutoSize = true;
@@ -549,7 +623,7 @@
             this.radioSpeech.TabIndex = 16;
             this.radioSpeech.Text = "Speech";
             this.radioSpeech.UseVisualStyleBackColor = false;
-            this.radioSpeech.Click += new System.EventHandler(this.radioSpeech_Click);
+            this.radioSpeech.Click += new System.EventHandler(this.RadioSpeech_Click);
             // 
             // radioMusic
             // 
@@ -561,17 +635,17 @@
             this.radioMusic.TabIndex = 15;
             this.radioMusic.Text = "Music";
             this.radioMusic.UseVisualStyleBackColor = false;
-            this.radioMusic.Click += new System.EventHandler(this.radioMusic_Click);
+            this.radioMusic.Click += new System.EventHandler(this.RadioMusic_Click);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.BackColor = System.Drawing.Color.Orange;
-            this.label7.Location = new System.Drawing.Point(9, 70);
+            this.label7.Location = new System.Drawing.Point(12, 70);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(94, 13);
+            this.label7.Size = new System.Drawing.Size(91, 13);
             this.label7.TabIndex = 14;
-            this.label7.Text = "Traffic information:";
+            this.label7.Text = "News information:";
             // 
             // label1
             // 
@@ -599,7 +673,7 @@
             this.tabTransmitter.Controls.Add(this.btnApplySettings);
             this.tabTransmitter.Location = new System.Drawing.Point(4, 22);
             this.tabTransmitter.Name = "tabTransmitter";
-            this.tabTransmitter.Size = new System.Drawing.Size(529, 401);
+            this.tabTransmitter.Size = new System.Drawing.Size(529, 440);
             this.tabTransmitter.TabIndex = 2;
             this.tabTransmitter.Text = "Settings";
             this.tabTransmitter.UseVisualStyleBackColor = true;
@@ -630,6 +704,7 @@
             // 
             // comboMS
             // 
+            this.comboMS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMS.FormattingEnabled = true;
             this.comboMS.Items.AddRange(new object[] {
             "Speech",
@@ -650,6 +725,7 @@
             // 
             // comboPtyStandard
             // 
+            this.comboPtyStandard.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPtyStandard.FormattingEnabled = true;
             this.comboPtyStandard.Items.AddRange(new object[] {
             "Europe",
@@ -658,7 +734,7 @@
             this.comboPtyStandard.Name = "comboPtyStandard";
             this.comboPtyStandard.Size = new System.Drawing.Size(131, 21);
             this.comboPtyStandard.TabIndex = 27;
-            this.comboPtyStandard.SelectedIndexChanged += new System.EventHandler(this.comboPtyStandard_SelectedIndexChanged);
+            this.comboPtyStandard.SelectedIndexChanged += new System.EventHandler(this.ComboPtyStandard_SelectedIndexChanged);
             // 
             // label22
             // 
@@ -691,6 +767,7 @@
             // 
             // comboTp
             // 
+            this.comboTp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTp.FormattingEnabled = true;
             this.comboTp.Items.AddRange(new object[] {
             "No",
@@ -728,6 +805,7 @@
             // 
             // comboPty
             // 
+            this.comboPty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPty.FormattingEnabled = true;
             this.comboPty.Location = new System.Drawing.Point(138, 72);
             this.comboPty.Name = "comboPty";
@@ -802,6 +880,7 @@
             // 
             // comboRdsMode
             // 
+            this.comboRdsMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRdsMode.FormattingEnabled = true;
             this.comboRdsMode.Items.AddRange(new object[] {
             "OFF",
@@ -1472,6 +1551,7 @@
             // 
             // comboPreEmphase
             // 
+            this.comboPreEmphase.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPreEmphase.FormattingEnabled = true;
             this.comboPreEmphase.Items.AddRange(new object[] {
             "50 uS",
@@ -1501,6 +1581,7 @@
             // 
             // comboAudioMode
             // 
+            this.comboAudioMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioMode.FormattingEnabled = true;
             this.comboAudioMode.Items.AddRange(new object[] {
             "STEREO",
@@ -1513,6 +1594,7 @@
             // txtStationName
             // 
             this.txtStationName.Location = new System.Drawing.Point(101, 29);
+            this.txtStationName.MaxLength = 8;
             this.txtStationName.Name = "txtStationName";
             this.txtStationName.Size = new System.Drawing.Size(66, 20);
             this.txtStationName.TabIndex = 5;
@@ -1536,7 +1618,7 @@
             this.btnApplySettings.TabIndex = 10;
             this.btnApplySettings.Text = "Save to device";
             this.btnApplySettings.UseVisualStyleBackColor = true;
-            this.btnApplySettings.Click += new System.EventHandler(this.btnApplySettings_Click);
+            this.btnApplySettings.Click += new System.EventHandler(this.BtnApplySettings_Click);
             // 
             // tabAbout
             // 
@@ -1547,7 +1629,7 @@
             this.tabAbout.Controls.Add(this.pictureBox3);
             this.tabAbout.Location = new System.Drawing.Point(4, 22);
             this.tabAbout.Name = "tabAbout";
-            this.tabAbout.Size = new System.Drawing.Size(529, 401);
+            this.tabAbout.Size = new System.Drawing.Size(529, 440);
             this.tabAbout.TabIndex = 3;
             this.tabAbout.Text = "About";
             this.tabAbout.UseVisualStyleBackColor = true;
@@ -1567,9 +1649,9 @@
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label18.Location = new System.Drawing.Point(192, 89);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(45, 20);
+            this.label18.Size = new System.Drawing.Size(89, 20);
             this.label18.TabIndex = 3;
-            this.label18.Text = "2024";
+            this.label18.Text = "18.06.2024";
             // 
             // label16
             // 
@@ -1589,7 +1671,7 @@
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(238, 20);
             this.label15.TabIndex = 1;
-            this.label15.Text = "VHF FM Stereo Transmitter v1.0";
+            this.label15.Text = "VHF FM Stereo Transmitter v1.1";
             // 
             // pictureBox3
             // 
@@ -1602,29 +1684,52 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 431);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 474);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(540, 22);
             this.statusStrip1.TabIndex = 18;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(72, 17);
+            this.toolStripStatusLabel.Text = "Disconected";
+            // 
             // timerScroll
             // 
             this.timerScroll.Interval = 20;
-            this.timerScroll.Tick += new System.EventHandler(this.timerScroll_Tick);
+            this.timerScroll.Tick += new System.EventHandler(this.TimerScroll_Tick);
             // 
             // timerRadioTextAuto
             // 
             this.timerRadioTextAuto.Enabled = true;
             this.timerRadioTextAuto.Interval = 1000;
-            this.timerRadioTextAuto.Tick += new System.EventHandler(this.timerRadioTextAuto_Tick);
+            this.timerRadioTextAuto.Tick += new System.EventHandler(this.TimerRadioTextAuto_Tick);
+            // 
+            // RdsDataTime
+            // 
+            this.RdsDataTime.Enabled = true;
+            this.RdsDataTime.Tick += new System.EventHandler(this.RdsDataTime_Tick);
+            // 
+            // debug
+            // 
+            this.debug.AutoSize = true;
+            this.debug.Location = new System.Drawing.Point(6, 193);
+            this.debug.Name = "debug";
+            this.debug.Size = new System.Drawing.Size(0, 13);
+            this.debug.TabIndex = 27;
             // 
             // Transmitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(540, 453);
+            this.ClientSize = new System.Drawing.Size(540, 496);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1661,6 +1766,8 @@
             this.tabAbout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1746,6 +1853,15 @@
         private System.Windows.Forms.ComboBox comboMS;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Timer timerRadioTextAuto;
+        private System.Windows.Forms.CheckBox chBoxNews;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox txtNews;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.Timer RdsDataTime;
+        private System.Windows.Forms.Label LblDebug;
+        private System.Windows.Forms.Label debug;
     }
 }
 

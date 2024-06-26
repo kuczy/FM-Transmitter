@@ -1,7 +1,7 @@
 # 76-108 MHz RDS Stereo FM Transmitter
 <br>The transmitter is a low-power signal generator, in the VHF-FM frequency range of 76..108MHz. The presented device has the following features:
 
-- Low (legally correct) output power level
+- Low output power level (~ 20mW)
 - Frequency: 76MHz - 108Mhz,
 - Tuning step: 50kHz,
 - Preemphasis 50uS/75uS,
@@ -13,12 +13,14 @@
 - Windows application to set transmitter parameters and RDS support:
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- PI: Station ID,
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- PTY: Station program type,
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Changing the broadcast type (PTY) to "NEWS" during the broadcast of the News.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- PS: Radio station name,
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- MS: Music/Speech broadcasts,
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- TP/TA: Traffic announcement support.
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Date / Time - synchronization of the radio receiver with the PC controlling the transmitter
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Static): Text broadcast without control application,
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Dynamic): Text broadcast depending on the type of broadcast (Music/Speech/Traffic).
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText automation (Music): Work with an external player to automate RadioText
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText automation (Music): Work with an external player (Winamp / Foobar2000) to automate RadioText
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (e.g., "Now Playing: Artist - Track").
 
 ![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Transmitter_Front.jpg "FM Transmitter front view")
@@ -71,43 +73,43 @@ There is a dial on the front panel of the device, which allows you to navigate t
 - Turn the knob to the right or left to set the desired parameter.
 - Confirm the parameter by clicking on the knob again - The parameter will be stored and the # marker will return to the parameter selection.
 
-### Transmitter settings screen:
+### Transmitter settings screen (#1):
 <table>
-<tr><td>Back</td><td><-- Exit the menu</td></tr>
+<tr><td><- Back</td><td>Exit the menu</td></tr>
 <tr><td>Frequancy</td><td>Transmit frequency (76..108MHz in 50kHz increments)</td></tr>
 <tr><td>RDS</td><td>ON/OFF</td></tr>
 <tr><td>Audio mode</td><td>STEREO/MONO</td></tr>
 <tr><td>Pre emphase</td><td>50/75 uS</td></tr>
 <tr><td>Deviation</td><td>FM Deviation 0..87 kHz</td></tr>
-<tr><td>More...</td><td>Next menu --></td></tr>
+<tr><td>More -></td><td>Next menu</td></tr>
 </table>
 
-### I2S settings screen (Experimental):
+### Transmitter settings screen (#2):
 <table>
-<tr><td>Back</td><td><-- Return to previous menu</td></tr>
-<tr><td>Data rate</td><td>32/40/44.1/48 kHz</td></tr>
-<tr><td>Bit width</td><td>8/16/24/32 Bit</td></tr>
-<tr><td>Format</td><td>MSB/I2S/DSP1/DSP2/LSB Format (Correct value: I2S)</td></tr>
-<tr><td>MCK Invert</td><td>NORMAL/INVERT</td></tr>
+<tr><td><- Back</td><td>Return to previous menu</td></tr>
+<tr><td>Pilot level</td><td>19kHz Pilot level 7/8/9/10 %</td></tr>
+<tr><td>RDS deviat.</td><td>RDS Deviation 0..44.4 kHz</td></tr>
 </table>
 
-## Windows Application
+## Windows Application (Version 1.1)
 The application is available for download here: [DOWNLOAD APPLICATION](https://github.com/kuczy/FM-Transmitter/raw/master/Download/FM%20Transmitter.exe)
 <br>To take advantage of all the capabilities of the FM transmitter, use the Windows application "FM Transmitter".
 It allows you to set the parameters of the transmitter but most importantly, it allows you to dynamically control RDS messages.
+<p>Two clocks are shown at the bottom of the application window. 
+<br>Verify the correctness of the displayed date and the universal time (UTC) and local time (Local). The date and time is sent by RDS, and allows synchronization of listeners' radio receivers.
 
 ### Application main screen:
 ---
 The main screen is divided into three panels:
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App1.jpg "Windows Application Main Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App1.1.jpg "Windows Application Main Screen")
 
 <p><b>"Front Panel".</b>
 <br>Is a representation of the physical display of the device. All icons, stand for the same functions described earlier when describing the device.</p>
 
 <p><b>"RDS Control"</b>
 <br>RDS Standard Allows you to specify the type of broadcast currently being transmitted. We distinguish between two basic types of transmission (M/S): Music / Speech.  The radio receiver can change the sound correction settings depending on the type of broadcast.
-An additional special broadcast type is (TA) "Traffic Information".
+<br>Additional special transmission types are "NEWS" - changing the PTY parameter set in the settings tab - to "NEWS" when broadcasting news sudsion, and "Traffic information" (TA) .
 The possibility of broadcasting traffic information (TP) depends on the setting in the Settings tab. The radio receiver can automatically select the radio station broadcasting the traffic message, and/or increase the volume of the received message.</p>
 
 <p>The RDS Control panel allows manual switching of the broadcast type controls.
@@ -116,11 +118,24 @@ Clicking on the Music/Speech controls toggles the basic broadcast types, while c
 
 <p><b>"RDS Radio Text"</b>
 This panel is responsible for "Radio Text" content. The specificity of RDS allows broadcasting text messages with a maximum length of 64 characters, without national dialect characters.
-Three text fields allow you to enter separate messages for each type of broadcast (Music/Speech/Traffic).</p>
+Three text fields allow you to enter separate messages for each type of broadcast (Music/Speech/News/Traffic).</p>
 <p>In addition - to make it easier to control the RDS - if after typing a message, you confirm it by pressing the "ENTER" key - the broadcast type automatically changes to the one corresponding to the field.
-In this case, the "Traffic" type has no priority over "Music/Speech."<p>
+In this case, the "News/Traffic" type has no priority over "Music/Speech."<p>
 <p>Another feature of the transmitter application is the ability to automate RadioText broadcast messages for "Music" type broadcasts.
-To use the automation, check the "Music broadcasting Radio test source: Automatic" control. In this case, the message content will be taken from a "buffer" - text file "RDS_Automation.txt" which will be created automatically after the first launch of the application in its root folder. To make the automation work properly - I suggest using an audio player: Foobar2000 , along with a plug-in: Now Playing Simple.</p>
+To use the automation, check the "Music broadcasting Radio test source: Automatic" control. In this case, the message content will be taken from a "buffer" - text file "RDS_Automation.txt" which will be created automatically after the first launch of the application in its root folder. To make the automation work properly - I suggest using an audio player: Winamp along with the plug-in: Winamp Now Playing To File, or Foobar2000 , along with the plug-in: Now Playing Simple.</p>
+
+<p>&nbsp;</p>
+<p><b>Winamp player / Winamp Now Playing To File.</b>
+
+[Download Winamp latest version](https://download.nullsoft.com/winamp/client/winamp_latest_full.exe)
+
+[Download "Winamp Now Playing To File" plugin](https://github.com/kuczy/FM-Transmitter/raw/master/Download/WinampNowPlayingToFile.zip)
+<p>After installing Winamp, install the plugin according to the author's description on the site: https://github.com/Aldaviva/WinampNowPlayingToFile
+<p></p>Select the plug-in from the Plig-ins/General Purpose menu, then press "Configure selected plug-in", And configure according to your preferences. example:
+  
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Winamp_1.jpg "Plugin configuration 1")
+
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Winamp_2.jpg "Plugin configuration 2")
 
 <p>&nbsp;</p>
 <p><b>Foobar2000 player (32bit) / Now Playing Simple.</b>
@@ -148,7 +163,7 @@ A preview of the RadioText formatted this way is marked with a green square. The
 The Settings tab is used to set some parameters of the transmitter, and to configure the RDS.
 <br>Some of the parameters are repeated from the settings on the device - they are synchronized with each other when the application is launched. These options have been added, for the convenience of operating the transmitter.
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App2.jpg "Windows Application Settings Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App2.1.jpg "Windows Application Settings Screen")
 
 Transmitter settings:
 
@@ -173,4 +188,4 @@ To have the settings stored in the transmitter, after configuration, press the "
 ---
 Brief information about the program version, QR code to github resources
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App3.jpg "Windows Application About Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App3.1.jpg "Windows Application About Screen")

@@ -36,6 +36,7 @@ namespace FM_Transmitter
         string fileName = "";
         string saveFilePath = "";
         string applicationPath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
+        int PastMinute;
 
         string[] EuropePTY =
         {
@@ -218,6 +219,33 @@ namespace FM_Transmitter
                 }
             }
 
+            // if not exist - create, or read existing file - Broadcasting news Ratiotext
+            initialText = "RDS Text of news broadcast";
+            fileName = "RDS_News.txt";
+            saveFilePath = Path.Combine(applicationPath, fileName);
+            if (File.Exists(saveFilePath))
+            {
+                string readLine = File.ReadAllLines(saveFilePath).LastOrDefault();
+                if (readLine == null)
+                {
+                    txtNews.Text = initialText;
+                }
+                else
+                {
+                    txtNews.Text = readLine;
+                }
+            }
+            else
+            {
+                using (FileStream fs = File.Create(fileName))
+                {
+                    // Add some text to file
+                    Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                    fs.Write(title, 0, title.Length);
+                    txtNews.Text = initialText;
+                }
+            }
+
             // if not exist - create, or read existing file - Broadcasting traffic Ratiotext
             initialText = "RDS Text of traffic broadcast";
             fileName = "RDS_Traffic.txt";
@@ -293,6 +321,12 @@ namespace FM_Transmitter
             File.Delete(saveFilePath);
             w = new StreamWriter(saveFilePath, true);
             w.WriteLine(txtSpeech.Text);
+            w.Close();
+
+            saveFilePath = Path.Combine(applicationPath, "RDS_News.txt");
+            File.Delete(saveFilePath);
+            w = new StreamWriter(saveFilePath, true);
+            w.WriteLine(txtNews.Text);
             w.Close();
 
             saveFilePath = Path.Combine(applicationPath, "RDS_Traffic.txt");
@@ -376,7 +410,7 @@ namespace FM_Transmitter
         }
         private void Disconnect()                                       // Disconnect function
         {
-            pictureBox1.BackColor = Color.Black;
+            pictureBox1.BackColor = Color.Orange;
             lblDisconnect.Visible = true;
             Env_StationName = "";
             Env_RadioText = "";
@@ -397,7 +431,7 @@ namespace FM_Transmitter
                 }
             }
         }
-        private void btnRetry_Click(object sender, EventArgs e)         // Retry function
+        private void BtnRetry_Click(object sender, EventArgs e)         // Retry function
         {
             Disconnect();
             Connect();
@@ -407,10 +441,10 @@ namespace FM_Transmitter
         private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             Action act;             //utworzenie delegata
-            act = readComPort;      //przypisanie naszej metody do delegata
+            act = ReadComPort;      //przypisanie naszej metody do delegata
             Invoke(act);            //wywołanie delegata
         }
-        private void readComPort()
+        private void ReadComPort()
         {
             while (dataReceive != true)
             {
@@ -560,7 +594,7 @@ namespace FM_Transmitter
             }
 
             txtPi.Text = (Env_RdsPiCodeMSB + Env_RdsPiCodeLSB);
-            selectPTY();
+            SelectPTY();
 
             if (Env_RdsMS == "0")
             {
@@ -588,7 +622,7 @@ namespace FM_Transmitter
         }
 
         // GUI functions (clicks, index changed etc...)
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(Env_Frequency != "")
             {
@@ -600,7 +634,7 @@ namespace FM_Transmitter
                 }
             }
         }
-        private void comboPtyStandard_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboPtyStandard_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboPtyStandard.SelectedIndex == 0)
             {
@@ -610,12 +644,13 @@ namespace FM_Transmitter
             {
                 comboPty.DataSource = UsaPTY;
             };
-            selectPTY();
+            SelectPTY();
         }
-        private void chBoxTraffic_CheckedChanged(object sender, EventArgs e)
+        private void ChBoxTraffic_CheckedChanged(object sender, EventArgs e)
         {
             if(chBoxTraffic.Checked == true)
             {
+                chBoxNews.Checked = false;
                 if (txtTraffic.TextLength > 0)
                 {
                     string data = "TEXT=" + txtTraffic.Text;
@@ -672,7 +707,7 @@ namespace FM_Transmitter
             }
             RadiotextLabelStartPosition();
         }
-        private void radioMusic_Click(object sender, EventArgs e)
+        private void RadioMusic_Click(object sender, EventArgs e)
         {
             if (chBoxTraffic.Checked == false)
             {
@@ -699,7 +734,7 @@ namespace FM_Transmitter
                 }
             }
         }
-        private void radioSpeech_Click(object sender, EventArgs e)
+        private void RadioSpeech_Click(object sender, EventArgs e)
         {
             if (chBoxTraffic.Checked == false)
             {
@@ -726,7 +761,7 @@ namespace FM_Transmitter
                 }
             }
         }
-        private void selectPTY()
+        private void SelectPTY()
         {
             int index=0;
             // PTY code
@@ -742,7 +777,7 @@ namespace FM_Transmitter
         }
 
         // RadioText Scrolling functions
-        private void timerScroll_Tick(object sender, EventArgs e)
+        private void TimerScroll_Tick(object sender, EventArgs e)
         {
             int LblX = lblRadiotext.Location.X;
             int LblY = lblRadiotext.Location.Y;
@@ -771,7 +806,7 @@ namespace FM_Transmitter
             lblRadiotext.Location = new Point(210, LblY);
         }
 
-        private void btnApplySettings_Click(object sender, EventArgs e)
+        private void BtnApplySettings_Click(object sender, EventArgs e)
         {
             if ((txtStationName.TextLength == 0) || (txtPi.TextLength < 4) || (txtRadioTextStatic.TextLength == 0))
             {
@@ -813,7 +848,7 @@ namespace FM_Transmitter
             
         }
 
-        private void timerRadioTextAuto_Tick(object sender, EventArgs e)
+        private void TimerRadioTextAuto_Tick(object sender, EventArgs e)
         {
             string fileName = "RDS_Automation.txt";
             string applicationPath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
@@ -838,21 +873,22 @@ namespace FM_Transmitter
             }
         }
 
-        private void radioTxtSourceAutomatic_Click(object sender, EventArgs e)
+        private void RadioTxtSourceAutomatic_Click(object sender, EventArgs e)
         {
             RadioTextAuto = "";
         }
 
-        private void radioTxtSourceManual_Click(object sender, EventArgs e)
+        private void RadioTxtSourceManual_Click(object sender, EventArgs e)
         {
             RadioTextAuto = "";
-            radioMusic_Click(sender, e);
+            RadioMusic_Click(sender, e);
         }
 
-        private void txtMusic_KeyPress(object sender, KeyPressEventArgs e)
+        private void TxtMusic_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
+                chBoxNews.Checked = false;
                 chBoxTraffic.Checked = false;
                 radioTxtSourceManual.PerformClick();
                 radioMusic.PerformClick();
@@ -860,23 +896,143 @@ namespace FM_Transmitter
             }
         }
 
-        private void txtSpeech_KeyPress(object sender, KeyPressEventArgs e)
+        private void TxtSpeech_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
+                chBoxNews.Checked = false;
                 chBoxTraffic.Checked = false;
                 radioSpeech.PerformClick();
                 e.Handled = true; //Disable "ding" sound
             }
         }
 
-        private void txtTraffic_KeyPress(object sender, KeyPressEventArgs e)
+        private void TxtTraffic_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
+                chBoxNews.Checked = false;
                 chBoxTraffic.Checked = true;
                 e.Handled = true; //Disable "ding" sound
             }
+        }
+
+        private void ChBoxNews_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chBoxNews.Checked == true)
+            {
+                chBoxTraffic.Checked = false;
+                if (txtNews.TextLength > 0)
+                {
+                    string data = "TEXT=" + txtNews.Text;
+                    serialPort1.WriteLine(data);
+                    lblRdsSource.Text = "News";
+                    data = "PTY=1";
+                    serialPort1.WriteLine(data);
+                    RadiotextLabelStartPosition();
+                }
+                else
+                {
+                    chBoxTraffic.Checked = false;
+                    MessageBox.Show("Fill in the text box: News information", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            else
+            {
+                string data = "PTY="+ Env_RdsPty;
+                serialPort1.WriteLine(data);
+
+                if (radioMusic.Checked)
+                {
+                    if (txtMusic.Text.Length > 0)
+                    {
+                        lblRdsSource.Text = "Music";
+                        data = "TEXT=" + txtMusic.Text;
+                        serialPort1.WriteLine(data);
+                        RadiotextLabelStartPosition();
+                    }
+                    else
+                    {
+                        radioMusic.Checked = false;
+                        MessageBox.Show("Fill in the text box: Broadcasting music", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                if (radioSpeech.Checked)
+                {
+                    if (txtSpeech.Text.Length > 0)
+                    {
+                        lblRdsSource.Text = "Speech";
+                        data = "TEXT=" + txtSpeech.Text;
+                        serialPort1.WriteLine(data);
+                        RadiotextLabelStartPosition();
+                    }
+                    else
+                    {
+                        radioSpeech.Checked = false;
+                        MessageBox.Show("Fill in the text box: Broadcasting speech", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                }
+
+            }
+            RadiotextLabelStartPosition();
+        }
+
+        private void TxtNews_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                chBoxNews.Checked = true;
+                chBoxTraffic.Checked = false;
+                e.Handled = true; //Disable "ding" sound
+            }
+        }
+
+        private void RdsDataTime_Tick(object sender, EventArgs e)
+        {
+            int Year = DateTime.UtcNow.Year;
+            int Month = DateTime.UtcNow.Month;
+            int Day = DateTime.UtcNow.Day;
+            int Hour = DateTime.UtcNow.Hour;
+            int Minute = DateTime.UtcNow.Minute;
+            int TimeOffset;
+            int TimeOffsetAbs;
+            int TimeOffsetSign;
+            int ModifiedJulianDate;
+
+            TimeSpan span = DateTime.Now.Subtract(DateTime.UtcNow);
+            span = DateTime.Now.Subtract(DateTime.UtcNow);              // Powtórzone 2x ponieważ przy pierwszym odczycie źle obliczał offset
+
+            TimeOffset = ((span.Hours * 2) + (span.Minutes / 30));
+            if (TimeOffset < 0){
+                TimeOffsetSign = 1;
+            }
+            else{
+                TimeOffsetSign = 0;
+            }
+            TimeOffsetAbs = Math.Abs(TimeOffset);
+
+            toolStripStatusLabel.Text = "DATE / TIME    UTC: ";
+            toolStripStatusLabel.Text += DateTime.UtcNow.ToString();
+            toolStripStatusLabel.Text += "    Local: ";
+            toolStripStatusLabel.Text += DateTime.Now.ToString();
+
+            if (Minute != PastMinute){
+                //DateTime dateTime = DateTime.UtcNow; //https://www.juliasos.com/misc/convert-datetime-to-julian-date-in-c-sharp-tooadate-safe/
+                int a = (14 - Month) / 12;
+                int y = Year + 4800 - a;
+                int m = Month + 12 * a - 3;
+                int julianDate = Day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+                ModifiedJulianDate = julianDate - 2400001;
+
+                string data = "DATETIME=" + ModifiedJulianDate + "^" + Hour + "^" + Minute + "^" + TimeOffsetSign + "^" + TimeOffsetAbs;
+                //debug.Text = data;
+                if (Env_RdsStatus == "1"){
+                    serialPort1.WriteLine(data);
+                }
+                PastMinute = Minute;
+                }
         }
     }
 }
