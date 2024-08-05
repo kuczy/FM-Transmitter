@@ -19,7 +19,7 @@
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- TP/TA: Traffic announcement support.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Date / Time - synchronization of the radio receiver with the PC controlling the transmitter
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Static): Text broadcast without control application,
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Dynamic): Text broadcast depending on the type of broadcast (Music/Speech/News/Traffic).
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText (Dynamic): Text broadcast depending on the type of broadcast (Music/Speech/Traffic).
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- RadioText automation (Music): Work with an external player (Winamp / Foobar2000) to automate RadioText
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (e.g., "Now Playing: Artist - Track").
 
@@ -91,7 +91,7 @@ There is a dial on the front panel of the device, which allows you to navigate t
 <tr><td>RDS deviat.</td><td>RDS Deviation 0..44.4 kHz</td></tr>
 </table>
 
-## Windows Application (Version 1.1)
+## Windows Application (Version 1.2)
 The application is available for download here: [DOWNLOAD APPLICATION](https://github.com/kuczy/FM-Transmitter/raw/master/Download/FM%20Transmitter.exe)
 <br>To take advantage of all the capabilities of the FM transmitter, use the Windows application "FM Transmitter".
 It allows you to set the parameters of the transmitter but most importantly, it allows you to dynamically control RDS messages.
@@ -100,9 +100,9 @@ It allows you to set the parameters of the transmitter but most importantly, it 
 
 ### Application main screen:
 ---
-The main screen is divided into three panels:
+The main screen is divided into four panels:
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App1.1.jpg "Windows Application Main Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App1.2.jpg "Windows Application Main Screen")
 
 <p><b>"Front Panel".</b>
 <br>Is a representation of the physical display of the device. All icons, stand for the same functions described earlier when describing the device.</p>
@@ -123,6 +123,12 @@ Three text fields allow you to enter separate messages for each type of broadcas
 In this case, the "News/Traffic" type has no priority over "Music/Speech."<p>
 <p>Another feature of the transmitter application is the ability to automate RadioText broadcast messages for "Music" type broadcasts.
 To use the automation, check the "Music broadcasting Radio test source: Automatic" control. In this case, the message content will be taken from a "buffer" - text file "RDS_Automation.txt" which will be created automatically after the first launch of the application in its root folder. To make the automation work properly - I suggest using an audio player: Winamp along with the plug-in: Winamp Now Playing To File, or Foobar2000 , along with the plug-in: Now Playing Simple.</p>
+
+<p><b>"RDS Station name"</b>
+This panel allows unusual use of the RDS PS - (station name) field.
+The RDS standard does not provide for changing this field, but many radio stations use it similarly to RadioText.
+If you leave "Broadcast station name" in "Static" - RDS will send the name set in Settings->Station Name.
+However, when you enable "Dynamic" - The station name will be changed at a preset frequency, settled in the "time interval of PS changes" field. - and the displayed content from the "Dynamic text" field is divided into fragments of 8 characters - and sent to the transmitter.
 
 <p>&nbsp;</p>
 <p><b>Winamp player / Winamp Now Playing To File.</b>
@@ -163,7 +169,7 @@ A preview of the RadioText formatted this way is marked with a green square. The
 The Settings tab is used to set some parameters of the transmitter, and to configure the RDS.
 <br>Some of the parameters are repeated from the settings on the device - they are synchronized with each other when the application is launched. These options have been added, for the convenience of operating the transmitter.
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App2.1.jpg "Windows Application Settings Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App2.2.jpg "Windows Application Settings Screen")
 
 Transmitter settings:
 
@@ -171,7 +177,8 @@ Transmitter settings:
 - Frequency: Selection of the transmission frequency. When the application is turned on, the current value stored in the device will be highlighted (selected),
 - Audio mode: MONO/STEREO,
 - Pre emphase: 50/75 uS,
-- RDS: ON/OFF
+- RDS: ON/OFF,
+- RDS Data/Time: ON/OFF (Enables/disables sending of RDS time synchronization frame)
 
 RDS Settings:
 
@@ -184,8 +191,16 @@ RDS Settings:
 
 To have the settings stored in the transmitter, after configuration, press the "Save to device" button
 
+### AF Settings
+---
+In this tab you can set alternative frequencies. According to the RDS standard - having several transmitters operating on different frequencies - the receiver has the ability to automatically tune to another transmitter that has a stronger signal. (For example, when moving by car)
+You can select up to five alternative frequencies, and specify their values.
+By pressing the "Save to device" button - the list is stored in the device.
+
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App3.2.jpg "Alternative frequency Screen")
+
 ### About Screen
 ---
 Brief information about the program version, QR code to github resources
 
-![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App3.1.jpg "Windows Application About Screen")
+![alt text](https://github.com/kuczy/FM-Transmitter/blob/master/_images/Windows_App4.jpg "Windows Application About Screen")
