@@ -31,6 +31,17 @@ namespace FM_Transmitter
         string Env_RdsMS = "";              // String Music / Speech
         string Env_RadioText = "";          // String Radiotext
         string Env_RadioTextStatic = "";    // String Radiotext store in transmitter broadcasted when USB is disconected
+        string Env_AfNumber = "";
+        string Env_Af1 = "";
+        string Env_Af2 = "";
+        string Env_Af3 = "";
+        string Env_Af4 = "";
+        string Env_Af5 = "";
+        string DynamicTemporaryPs = "";     // String: Station name
+        string DynamicPs = "";     // String: Station name
+        int DynamicPsIndex = 0;
+        int DynamicPsIndexRest = 0;
+        int DynamicPsCurrentIndex = 0;
         string RadioTextAuto = "";          
         string initialText = "";
         string fileName = "";
@@ -117,11 +128,10 @@ namespace FM_Transmitter
         // Form functions
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboPty.DataSource = EuropePTY;
 
             // if not exist - create, or read existing file - Broadcasting music Ratiotext
             initialText = "0";
-            fileName = "config.data";
+            fileName = "configPTY.data";
             saveFilePath = Path.Combine(applicationPath, fileName);
             if (File.Exists(saveFilePath))
             {
@@ -164,6 +174,109 @@ namespace FM_Transmitter
                 comboPty.DataSource = EuropePTY;
             }
 
+            // if not exist - create, or read existing file - Broadcasting dynamic PS combo
+            comboDynamicPSTime.SelectedIndex = 1;
+            initialText = "1";
+            fileName = "configDynamicPTY.data";
+            saveFilePath = Path.Combine(applicationPath, fileName);
+            if (File.Exists(saveFilePath))
+            {
+                string readLine = File.ReadAllLines(saveFilePath).LastOrDefault();
+                if (readLine == null)
+                {
+                    using (FileStream fs = File.Create(fileName))
+                    {
+                        // Add some text to file
+                        Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                        fs.Write(title, 1, title.Length);
+                    }
+                }
+                else
+                {
+                    string text = File.ReadAllLines(saveFilePath).LastOrDefault();
+                    comboDynamicPSTime.SelectedIndex = Int32.Parse(text);
+                }
+            }
+            else
+            {
+                using (FileStream fs = File.Create(fileName))
+                {
+                    // Add some text to file
+                    Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                    fs.Write(title, 0, title.Length);
+                }
+                comboPtyStandard.SelectedIndex = 0;
+                comboPty.DataSource = EuropePTY;
+            }
+
+            comboRdsDataTime.SelectedIndex = 0;
+            // if not exist - create, or read existing file - RDS Date / Time broadcasting
+            initialText = "0";
+            fileName = "configTime.data";
+            saveFilePath = Path.Combine(applicationPath, fileName);
+            if (File.Exists(saveFilePath))
+            {
+                string readLine = File.ReadAllLines(saveFilePath).LastOrDefault();
+                if (readLine == null)
+                {
+                    using (FileStream fs = File.Create(fileName))
+                    {
+                        // Add some text to file
+                        Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                        fs.Write(title, 0, title.Length);
+                    }
+                    comboRdsDataTime.SelectedIndex = 1;
+                }
+                else
+                {
+                    string text = File.ReadAllLines(saveFilePath).LastOrDefault();
+                    if (text == "0")
+                    {
+                        comboRdsDataTime.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        comboRdsDataTime.SelectedIndex = 1;
+                    }
+                }
+            }
+            else
+            {
+                using (FileStream fs = File.Create(fileName))
+                {
+                    // Add some text to file
+                    Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                    fs.Write(title, 0, title.Length);
+                }
+                comboPtyStandard.SelectedIndex = 1;
+            }
+
+            // if not exist - create, or read existing file - Broadcasting dynamic text
+            initialText = "RDS Text of dynamic Station Name";
+            fileName = "RDS_DynamicPs.txt";
+            saveFilePath = Path.Combine(applicationPath, fileName);
+            if (File.Exists(saveFilePath))
+            {
+                string readLine = File.ReadAllLines(saveFilePath).LastOrDefault();
+                if (readLine == null)
+                {
+                    txtDynamicPS.Text = initialText;
+                }
+                else
+                {
+                    txtDynamicPS.Text = readLine;
+                }
+            }
+            else
+            {
+                using (FileStream fs = File.Create(fileName))
+                {
+                    // Add some text to file
+                    Byte[] title = new UTF8Encoding(true).GetBytes(initialText);
+                    fs.Write(title, 0, title.Length);
+                    txtDynamicPS.Text = initialText;
+                }
+            }
 
             // if not exist - create, or read existing file - Broadcasting music Ratiotext
             initialText = "RDS Text of music broadcast";
@@ -304,11 +417,31 @@ namespace FM_Transmitter
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            lblStationName.Text = Env_StationName;
+            sendDynamicPS();
             string applicationPath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
-            string saveFilePath = Path.Combine(applicationPath, "config.data");
+            string saveFilePath = Path.Combine(applicationPath, "configPTY.data");
             File.Delete(saveFilePath);
             StreamWriter w = new StreamWriter(saveFilePath, true);
             w.WriteLine(comboPtyStandard.SelectedIndex.ToString());
+            w.Close();
+
+            saveFilePath = Path.Combine(applicationPath, "configTime.data");
+            File.Delete(saveFilePath);
+            w = new StreamWriter(saveFilePath, true);
+            w.WriteLine(comboRdsDataTime.SelectedIndex.ToString());
+            w.Close();
+
+            saveFilePath = Path.Combine(applicationPath, "configDynamicPTY.data");
+            File.Delete(saveFilePath);
+            w = new StreamWriter(saveFilePath, true);
+            w.WriteLine(comboDynamicPSTime.SelectedIndex.ToString());
+            w.Close();
+
+            saveFilePath = Path.Combine(applicationPath, "RDS_DynamicPs.txt");
+            File.Delete(saveFilePath);
+            w = new StreamWriter(saveFilePath, true);
+            w.WriteLine(txtDynamicPS.Text);
             w.Close();
 
             saveFilePath = Path.Combine(applicationPath, "RDS_Music.txt");
@@ -394,7 +527,6 @@ namespace FM_Transmitter
                 serialPort1.Open();
                 lblDisconnect.Visible = false;
                 pictureBox1.BackColor = Color.Orange;
-                lblDevice.Visible = true;
                 lblStationName.Visible = true;
                 scrollPanel.Visible = true;
                 lblAudioSource.Visible = true;
@@ -403,9 +535,9 @@ namespace FM_Transmitter
             }
             catch (Exception)
             {
-                MessageBox.Show("No connected transmitter found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    scrollPanel.Visible = false;
+                    MessageBox.Show("No connected transmitter found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
             btnRetry.Visible = true;
         }
         private void Disconnect()                                       // Disconnect function
@@ -419,8 +551,6 @@ namespace FM_Transmitter
             lblRadiotext.Text = "";
             lblFrequency.Text = "";
             lblAudioSource.Text = "";
-            if (serialPort1.IsOpen)
-            {
                 try
                 {
                     serialPort1.Close();
@@ -429,7 +559,6 @@ namespace FM_Transmitter
                 {
                     MessageBox.Show(ex.Message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
         private void BtnRetry_Click(object sender, EventArgs e)         // Retry function
         {
@@ -485,10 +614,17 @@ namespace FM_Transmitter
                         Env_RdsMS = parameters[10];
                         Env_RadioText = parameters[11];
                         Env_RadioTextStatic = parameters[12];
+                        Env_AfNumber = parameters[13];
+                        Env_Af1 = parameters[14];
+                        Env_Af2 = parameters[15];
+                        Env_Af3 = parameters[16];
+                        Env_Af4 = parameters[17];
+                        Env_Af5 = parameters[18];
 
                         btnRetry.Visible = false;
                         ShowFrontPanel();
                         ShowSettings();
+                        ShowAF();
 
                         break;
                     case "AS":
@@ -514,6 +650,7 @@ namespace FM_Transmitter
             }
             DataReceiveBuffer = "";
         }
+
 
         // Show Panels (copy data from variables to screens
         private void ShowFrontPanel()
@@ -556,6 +693,9 @@ namespace FM_Transmitter
             lblRadiotext.Text = Env_RadioText;
             RadiotextLabelStartPosition();
             grpRadioTexts.Enabled = true;
+            grpDynamicPS.Enabled = true;
+            grpAF.Enabled = true;
+            RdsDataTime.Enabled = true;
         }
         private void ShowSettings()
         {
@@ -565,6 +705,7 @@ namespace FM_Transmitter
             listFrequency.SetSelected(index, true);
 
             btnApplySettings.Enabled = true;
+            btnApplySettings_2.Enabled = true;
 
             if (Env_MonoStereo == "0")
             {
@@ -621,6 +762,69 @@ namespace FM_Transmitter
 
         }
 
+        private void ShowAF()
+        {
+            comboAfNumber.SelectedIndex = Int32.Parse(Env_AfNumber);
+            comboAf1.SelectedIndex = Int32.Parse(Env_Af1);
+            comboAf2.SelectedIndex = Int32.Parse(Env_Af2);
+            comboAf3.SelectedIndex = Int32.Parse(Env_Af3);
+            comboAf4.SelectedIndex = Int32.Parse(Env_Af4);
+            comboAf5.SelectedIndex = Int32.Parse(Env_Af5);
+
+            ShowAfCombos();
+        }
+        private void ShowAfCombos()
+        {
+            if (comboAfNumber.SelectedIndex == 0)
+            {
+                comboAf1.Enabled = false;
+                comboAf2.Enabled = false;
+                comboAf3.Enabled = false;
+                comboAf4.Enabled = false;
+                comboAf5.Enabled = false;
+            }
+            if (comboAfNumber.SelectedIndex == 1)
+            {
+                comboAf1.Enabled = true;
+                comboAf2.Enabled = false;
+                comboAf3.Enabled = false;
+                comboAf4.Enabled = false;
+                comboAf5.Enabled = false;
+            }
+            if (comboAfNumber.SelectedIndex == 2)
+            {
+                comboAf1.Enabled = true;
+                comboAf2.Enabled = true;
+                comboAf3.Enabled = false;
+                comboAf4.Enabled = false;
+                comboAf5.Enabled = false;
+            }
+            if (comboAfNumber.SelectedIndex == 3)
+            {
+                comboAf1.Enabled = true;
+                comboAf2.Enabled = true;
+                comboAf3.Enabled = true;
+                comboAf4.Enabled = false;
+                comboAf5.Enabled = false;
+            }
+            if (comboAfNumber.SelectedIndex == 4)
+            {
+                comboAf1.Enabled = true;
+                comboAf2.Enabled = true;
+                comboAf3.Enabled = true;
+                comboAf4.Enabled = true;
+                comboAf5.Enabled = false;
+            }
+            if (comboAfNumber.SelectedIndex == 5)
+            {
+                comboAf1.Enabled = true;
+                comboAf2.Enabled = true;
+                comboAf3.Enabled = true;
+                comboAf4.Enabled = true;
+                comboAf5.Enabled = true;
+            }
+        }
+
         // GUI functions (clicks, index changed etc...)
         private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -654,10 +858,16 @@ namespace FM_Transmitter
                 if (txtTraffic.TextLength > 0)
                 {
                     string data = "TEXT=" + txtTraffic.Text;
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     lblRdsSource.Text = "Traffic";
                     data = "TA=1";
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     RadiotextLabelStartPosition();
                 }
                 else
@@ -670,7 +880,10 @@ namespace FM_Transmitter
             else
             {
                 string data = "TA=0";
-                serialPort1.WriteLine(data);
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.WriteLine(data);
+                }
 
                 if (radioMusic.Checked)
                 {
@@ -678,7 +891,10 @@ namespace FM_Transmitter
                     {
                         lblRdsSource.Text = "Music";
                         data = "TEXT=" + txtMusic.Text;
-                        serialPort1.WriteLine(data);
+                        if (serialPort1.IsOpen)
+                        {
+                            serialPort1.WriteLine(data);
+                        }
                         RadiotextLabelStartPosition();
                     }
                     else
@@ -693,7 +909,10 @@ namespace FM_Transmitter
                     {
                         lblRdsSource.Text = "Speech";
                         data = "TEXT=" + txtSpeech.Text;
-                        serialPort1.WriteLine(data);
+                        if (serialPort1.IsOpen)
+                        {
+                            serialPort1.WriteLine(data);
+                        }
                         RadiotextLabelStartPosition();
                     }
                     else
@@ -714,10 +933,16 @@ namespace FM_Transmitter
                 if(txtMusic.Text.Length > 0)
                 {
                     string data = "TEXT=" + txtMusic.Text;
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     lblRdsSource.Text = "Music";
                     data = "MS=1";
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     RadiotextLabelStartPosition();
                 }
                 else
@@ -741,10 +966,16 @@ namespace FM_Transmitter
                 if (txtSpeech.Text.Length > 0)
                 {
                     string data = "TEXT=" + txtSpeech.Text;
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     lblRdsSource.Text = "Speech";
                     data = "MS=0";
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     RadiotextLabelStartPosition();
                 }
                 else
@@ -797,7 +1028,6 @@ namespace FM_Transmitter
             {
                 lblRadiotext.Location = new Point(0, LblY);
             }
-            
         }
         private void RadiotextLabelStartPosition()
         {
@@ -842,7 +1072,22 @@ namespace FM_Transmitter
                 DataTransmittBuffer += comboMS.SelectedIndex;
                 DataTransmittBuffer += "^";
                 DataTransmittBuffer += txtRadioTextStatic.Text;
-                serialPort1.WriteLine(DataTransmittBuffer);
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAfNumber.SelectedIndex;
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAf1.SelectedIndex;
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAf2.SelectedIndex;
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAf3.SelectedIndex;
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAf4.SelectedIndex;
+                DataTransmittBuffer += "^";
+                DataTransmittBuffer += comboAf5.SelectedIndex;
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.WriteLine(DataTransmittBuffer);
+                }
                 DataTransmittBuffer = "";
             }
             
@@ -866,7 +1111,10 @@ namespace FM_Transmitter
                             RadioTextAuto = text;
                             //txtMusic.Text = text;
                             string data = "TEXT=" + text;
-                            serialPort1.WriteLine(data);
+                            if (serialPort1.IsOpen)
+                            {
+                                serialPort1.WriteLine(data);
+                            }
                         }
                     }
                 }
@@ -925,10 +1173,16 @@ namespace FM_Transmitter
                 if (txtNews.TextLength > 0)
                 {
                     string data = "TEXT=" + txtNews.Text;
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     lblRdsSource.Text = "News";
                     data = "PTY=1";
-                    serialPort1.WriteLine(data);
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                     RadiotextLabelStartPosition();
                 }
                 else
@@ -941,7 +1195,10 @@ namespace FM_Transmitter
             else
             {
                 string data = "PTY="+ Env_RdsPty;
-                serialPort1.WriteLine(data);
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.WriteLine(data);
+                }
 
                 if (radioMusic.Checked)
                 {
@@ -949,7 +1206,10 @@ namespace FM_Transmitter
                     {
                         lblRdsSource.Text = "Music";
                         data = "TEXT=" + txtMusic.Text;
-                        serialPort1.WriteLine(data);
+                        if (serialPort1.IsOpen)
+                        {
+                            serialPort1.WriteLine(data);
+                        }
                         RadiotextLabelStartPosition();
                     }
                     else
@@ -964,7 +1224,10 @@ namespace FM_Transmitter
                     {
                         lblRdsSource.Text = "Speech";
                         data = "TEXT=" + txtSpeech.Text;
-                        serialPort1.WriteLine(data);
+                        if (serialPort1.IsOpen)
+                        {
+                            serialPort1.WriteLine(data);
+                        }
                         RadiotextLabelStartPosition();
                     }
                     else
@@ -991,6 +1254,30 @@ namespace FM_Transmitter
 
         private void RdsDataTime_Tick(object sender, EventArgs e)
         {
+
+            // Addons - check is COM Port is open - if not - make app windows inactive
+            if (serialPort1.IsOpen)
+            {
+                // do nothing
+            }
+            else
+            {
+                icoStereo.Visible = false;
+                icoMono.Visible = false;
+                icoRDS.Visible = false;
+                icoUSB.Visible = false;
+                RdsDataTime.Enabled = false;
+                grpRdsCntrl.Enabled = false;
+                grpRadioTexts.Enabled = false;
+                grpDynamicPS.Enabled = false;
+                grpBasicSettings.Enabled = false;
+                grpRdsSettings.Enabled = false;
+                grpAF.Enabled = false;
+                btnApplySettings.Enabled = false;
+                Disconnect();
+                Connect();
+            }
+
             int Year = DateTime.UtcNow.Year;
             int Month = DateTime.UtcNow.Month;
             int Day = DateTime.UtcNow.Day;
@@ -1028,11 +1315,143 @@ namespace FM_Transmitter
 
                 string data = "DATETIME=" + ModifiedJulianDate + "^" + Hour + "^" + Minute + "^" + TimeOffsetSign + "^" + TimeOffsetAbs;
                 //debug.Text = data;
-                if (Env_RdsStatus == "1"){
-                    serialPort1.WriteLine(data);
+                if ((Env_RdsStatus == "1") && (comboRdsDataTime.SelectedIndex == 0)) {
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.WriteLine(data);
+                    }
                 }
                 PastMinute = Minute;
+            }
+        }
+
+        private void LockAfCombos(object sender, EventArgs e)
+        {
+            ShowAfCombos();
+        }
+
+        private void comboAf1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Env_Af1 = comboAf1.SelectedIndex.ToString();
+        }
+
+        private void comboAf2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Env_Af2 = comboAf2.SelectedIndex.ToString();
+        }
+
+        private void comboAf3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Env_Af3 = comboAf3.SelectedIndex.ToString();
+        }
+
+        private void comboAf4_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Env_Af4 = comboAf4.SelectedIndex.ToString();
+        }
+
+        private void comboAf5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Env_Af5 = comboAf5.SelectedIndex.ToString();
+        }
+
+        
+        private void scrollDynamicPs()
+        {
+            if (radioPsDynamic.Checked == true)
+            {
+                if(DynamicTemporaryPs.Length == 0)
+                {
+                    radioPsStatic.Checked = true;
+                    MessageBox.Show("Fill in the text box: Dynamic text", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else
+                {
+                    if(DynamicTemporaryPs.Length <= 8)
+                    {
+                        lblStationName.Text = DynamicPs = DynamicTemporaryPs;
+                        sendDynamicPS();
+                    }
+                    else
+                    {
+                        if (DynamicPsCurrentIndex < DynamicPsIndex)
+                        {
+                            DynamicPs = DynamicTemporaryPs.Substring((DynamicPsCurrentIndex * 8), 8);
+                            lblStationName.Text = DynamicPs;
+                            sendDynamicPS();
+                            DynamicPsCurrentIndex++;
+                        }else if (DynamicPsCurrentIndex == DynamicPsIndex)
+                        {
+                            if(DynamicPsIndexRest == 0)
+                            {
+                                DynamicPsCurrentIndex = 0;
+                            }
+                            else
+                            {
+                                DynamicPs = DynamicTemporaryPs.Substring((DynamicPsCurrentIndex * 8), DynamicPsIndexRest);
+                                lblStationName.Text = DynamicPs;
+                                sendDynamicPS();
+                                DynamicPsCurrentIndex = 0;
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PsDynamicStart()
+        {
+            DynamicTemporaryPs = txtDynamicPS.Text;
+            if (DynamicTemporaryPs.Length > 8)
+            {
+                DynamicPsCurrentIndex = 0;
+                DynamicPsIndex = DynamicTemporaryPs.Length / 8;
+                DynamicPsIndexRest = DynamicTemporaryPs.Length - (DynamicPsIndex * 8);
+                timerDynamicPs.Start();
+            }
+            scrollDynamicPs();
+        }
+        private void radioPsDynamic_Click(object sender, EventArgs e)
+        {
+            PsDynamicStart();
+        }
+        private void radioPsStatic_Click(object sender, EventArgs e)
+        {
+            timerDynamicPs.Stop();
+            lblStationName.Text = Env_StationName;
+            sendDynamicPS();
+        }
+        private void sendDynamicPS()
+        {
+            string data = "DYNAMICPS=" + lblStationName.Text;
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.WriteLine(data);
+            }
+        }
+
+        private void timerDynamicPs_Tick(object sender, EventArgs e)
+        {
+            scrollDynamicPs();
+        }
+
+        private void comboDynamicPSTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            timerDynamicPs.Stop();
+            timerDynamicPs.Interval = 1000 * Int32.Parse(comboDynamicPSTime.Text);
+            timerDynamicPs.Start();
+        }
+
+        private void txtDynamicPS_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                radioPsStatic.Checked = false;
+                radioPsDynamic.Checked = true;
+                e.Handled = true; //Disable "ding" sound
+                PsDynamicStart();
+            }
         }
     }
 }
